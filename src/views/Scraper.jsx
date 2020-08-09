@@ -1,29 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AceEditor from "react-ace";
+import { connect } from "react-redux";
 import { ScraperButton } from "../components/ScraperButtons";
-import { ScraperForm } from "../components/ScraperForm";
-import preset from "../preset/presets.js";
+import ScraperForm from "../components/ScraperForm";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/ext-language_tools";
-
-export const Scraper = () => {
+import { editTemplate } from "../actions/details";
+const Scraper = ({ template, editTemplate }) => {
   function onChange(newValue) {
     console.log("change", newValue);
   }
-  const [value, setValue] = useState(preset.template);
+  const [value, setValue] = useState(template);
   const [newsButton, setNews] = useState(false);
   const [regButton, setReg] = useState(false);
+  useEffect(() => {
+    setValue(template);
+    editTemplate(template);
+  }, [template, setValue, editTemplate]);
   var temp;
   function handleClick(type) {
     if (type === "news") {
       setNews(!newsButton);
-      // temp = preset.template.split("R_NAME_ABBR").join("N_SCRAPER_XY"); // have identifiers setup in the preset and
-      temp = preset.template.split("ItemType.REGULATION").join("ItemType.NEWS");
+      temp = value.split("ItemType.REGULATION").join("ItemType.NEWS");
     } else if (type === "reg") {
       setReg(!regButton);
-      // temp = preset.template.split("R_NAME_ABBR").join("R_SCRAPER_XY"); // have identifiers setup in the preset and
-      temp = preset.template.split("ItemType.NEWS").join("ItemType.REGULATION");
+      temp = value.split("ItemType.NEWS").join("ItemType.REGULATION");
     }
     setValue(temp);
   }
@@ -81,3 +83,10 @@ export const Scraper = () => {
     </div>
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    template: state.scraper.template,
+  };
+};
+
+export default connect(mapStateToProps, { editTemplate })(Scraper);

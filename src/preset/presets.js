@@ -8,13 +8,13 @@ from sonic.sonic_utils import SonicUtils
 
 class ScraperClass(scrapy.Spider):
     # VERIFY NAMES AND ABBREVIATIONS
-    name = " X_NAME_ABBR"
+    name = "X_NAME_ABBR"
     regulator = "REG (CTRY)"
     country = "COUNTRY"
     regulator_full_name = "REGULATOR_FULL_NAME"
 
     main_url = "https://www.regulatorWebsite.com"
-    sheet_name = " X_NAME_ABBR"
+    sheet_name = "X_NAME_ABBR"
     fieldnames = [
         "regulator",
         "regulator_full_name",
@@ -149,6 +149,82 @@ from sonic.sonic_utils import SonicUtils
 LOGGER.setLevel(logging.ERROR)
 
 PATH_DIR = dirname(abspath(__file__))
-GECKODRIVER_PATH = abspath(join(PATH_DIR, "../../geckodriver"))`,
+GECKODRIVER_PATH = abspath(join(PATH_DIR, "../../geckodriver"))
+
+#### DEFINE CLASS NAME AND VARIABLES 
+
+def __init__(self, *args, **kwargs):
+        options = Options()
+        options.headless = True
+        self.driver = webdriver.Firefox(
+            options=options, executable_path=GECKODRIVER_PATH
+        )
+
+def __del__(self):
+    self.driver.quit()
+
+#### INSIDE PARSER METHOD 
+meta = response.meta
+source = response.url
+self.driver.get(source)
+`,
+  pagination: `
+next_page = response.xpath('//LINK TO NEXT PAGE').extract_first()
+if next_page is not None:
+next_page_url = response.urljoin(next_page)
+yield scrapy.Request(next_page_url, callback=self._parse_method, meta=meta)
+
+###### VER 2
+
+# FROM HTML_SGX_SG
+next_page = response.xpath('//LINK TO NEXT PAGE')
+last_page = next_page.xpath("./CONDITION FOR LAST PAGE").extract_first()
+if last_page is None:
+    next_page_url = next_page.xpath("./@href").extract_first()
+    if next_page_url is not None:
+        next_page_url = response.urljoin(next_page_url)
+        yield scrapy.Request(
+            next_page_url, callback=self._parse_method, meta=meta
+        )
+
+###### VER 3
+
+# FROM N_BAFIN_GE
+next_page = response.xpath(
+            '//*NEXT PAGE LINK'
+        ).extract_first()
+if next_page is not None:
+    next_page_url = response.urljoin(next_page)
+    yield scrapy.Request(next_page_url, callback=self._parse_method, meta=meta)`,
+  infinite_scrolling: `  
+# FROM N_ECB_EU
+
+meta = response.meta
+self.driver.get(response.url)
+self.driver.implicitly_wait(self.wait_time)
+body = self.driver.page_source
+actions = ActionChains(self.driver)
+response = HtmlResponse(
+    self.driver.current_url, body=body, encoding="utf-8"
+)  # handing over html response from selenium
+snippets = self.driver.find_elements_by_xpath("//*ELEMENTS THAT LOAD ON SCROLLING")
+for snippet in snippets:
+    # loading parts of the page by scrolling them into view
+    self.driver.execute_script("arguments[0].scrollIntoView();", snippet)
+    entries = snippet.find_elements_by_xpath("./FIND NEXT ELEMENT")
+    for entry in entries:
+        try:
+            # scraping code 
+        except:
+            self.driver.implicitly_wait(self.wait_time)`,
+  html_response: `
+meta = response.meta
+self.driver.get(response.url)
+self.driver.implicitly_wait(self.wait_time)
+body = self.driver.page_source
+actions = ActionChains(self.driver)
+response = HtmlResponse(
+    self.driver.current_url, body=body, encoding="utf-8"
+)  # handing over html response from selenium`,
 };
 export default preset;

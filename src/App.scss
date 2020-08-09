@@ -23,6 +23,9 @@ button {
   border: 0px;
 }
 // EDITOR
+.form-header {
+  text-align: center;
+}
 .editor {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -37,7 +40,7 @@ button {
   overflow-y: scroll;
   position: fixed;
   width: 450px;
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
   background: #e6ecef;
   top: 0;
   bottom: 0;
@@ -49,7 +52,7 @@ button {
 }
 .sidebar {
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1.5fr 2fr;
 }
 .scraperBtn {
   transition: all 0.8s ease;
@@ -68,6 +71,7 @@ button {
 }
 .input-field {
   font-weight: bold;
+  text-align: center;
   width: 75%;
   margin: 0 5px 20px;
   height: 35px;
@@ -80,6 +84,10 @@ button {
   font-size: 14px;
 }
 .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.form-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
