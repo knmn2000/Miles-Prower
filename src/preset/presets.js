@@ -225,6 +225,15 @@ body = self.driver.page_source
 actions = ActionChains(self.driver)
 response = HtmlResponse(
     self.driver.current_url, body=body, encoding="utf-8"
-)  # handing over html response from selenium`,
+)  # handing over html response from selenium
+
+#### With Explicit wait
+WebDriverWait(self.driver, self.delay).until(
+     EC.presence_of_element_located((By.XPATH, 'Xpath to be found'))
+)
+body = self.driver.page_source
+response = HtmlResponse(
+    self.driver.current_url, body=body, encoding="utf-8"
+)`,
 };
 export default preset;
