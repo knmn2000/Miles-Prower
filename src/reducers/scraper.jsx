@@ -7,6 +7,7 @@ import {
   EDIT_URL,
   EDIT_CLASS,
   EDIT_TEMPLATE,
+  EDIT_TYPE,
   ERROR,
 } from "../actions/types";
 const initState = {
@@ -19,13 +20,19 @@ const initState = {
     main_url: "https://www.regulatorWebsite.com",
     class_name: "ScraperClass",
   },
+  type: "reg",
   loading: null,
   error: null,
 };
 var template = null;
-
 export default function (state = initState, action) {
   switch (action.type) {
+    case EDIT_TYPE:
+      return {
+        ...state,
+        loading: false,
+        type: action.payload,
+      };
     case EDIT_TEMPLATE:
       return {
         ...state,
@@ -47,7 +54,19 @@ export default function (state = initState, action) {
     case EDIT_CLASS:
       template = state.template
         .split(`class ${state.details.class_name}(scrapy.Spider):`)
-        .join(`class ${action.payload.class_name}(scrapy.Spider):`);
+        .join(`class ${action.payload.class_name}(scrapy.Spider):`)
+        .split(
+          `sonic.spiders.regulation_spiders import ${state.details.class_name}`
+        )
+        .join(
+          `sonic.spiders.regulation_spiders import ${action.payload.class_name}`
+        )
+        .split(`sonic.spiders.news_spiders import ${state.details.class_name}`)
+        .join(`sonic.spiders.news_spiders import ${action.payload.class_name}`)
+        .split(`Test${state.details.class_name}`)
+        .join(`Test${action.payload.class_name}`)
+        .split(`spider = ${state.details.class_name}`)
+        .join(`spider = ${action.payload.class_name}`);
       return {
         ...state,
         template,

@@ -15,7 +15,6 @@ export const FormButtons = ({ text }) => {
         newClass = "btn-center";
       }
     }
-    // remove prev class
     var clearedClassList = thisDOM.current.className
       .replace(/btn-center|btn-right|btn-left/gi, "")
       .trim();

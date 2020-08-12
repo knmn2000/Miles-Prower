@@ -6,29 +6,39 @@ import ScraperForm from "../components/ScraperForm";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/ext-language_tools";
-import { editTemplate } from "../actions/details";
-const Scraper = ({ template, editTemplate }) => {
+import { editTemplate, editType } from "../actions/details";
+const Scraper = ({ template, editTemplate, editType, type }) => {
   function onChange(newValue) {
     console.log("change", newValue);
   }
   const [value, setValue] = useState(template);
   const [newsButton, setNews] = useState(false);
   const [regButton, setReg] = useState(false);
-  useEffect(() => {
-    setValue(template);
-    editTemplate(template);
-  }, [template, setValue, editTemplate]);
-  var temp;
   function handleClick(type) {
     if (type === "news") {
       setNews(!newsButton);
-      temp = value.split("ItemType.REGULATION").join("ItemType.NEWS");
     } else if (type === "reg") {
       setReg(!regButton);
-      temp = value.split("ItemType.NEWS").join("ItemType.REGULATION");
     }
-    setValue(temp);
+    editType(type);
   }
+  useEffect(() => {
+    if (type === "news") {
+      template = template
+        .split("ItemType.REGULATION")
+        .join("ItemType.NEWS")
+        .split("sonic.spiders.regulation_spiders")
+        .join("sonic.spiders.news_spiders");
+    } else {
+      template = template
+        .split("ItemType.NEWS")
+        .join("ItemType.REGULATION")
+        .split("sonic.spiders.news_spiders")
+        .join("sonic.spiders.regulation_spiders");
+    }
+    setValue(template);
+    editTemplate(template);
+  }, [setValue, editTemplate, type, handleClick]);
   return (
     <div className="editor">
       <AceEditor
@@ -86,7 +96,8 @@ const Scraper = ({ template, editTemplate }) => {
 const mapStateToProps = (state) => {
   return {
     template: state.scraper.template,
+    type: state.scraper.type,
   };
 };
 
-export default connect(mapStateToProps, { editTemplate })(Scraper);
+export default connect(mapStateToProps, { editTemplate, editType })(Scraper);

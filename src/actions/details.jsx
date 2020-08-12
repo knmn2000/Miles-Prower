@@ -6,7 +6,22 @@ import {
   EDIT_URL,
   EDIT_CLASS,
   EDIT_TEMPLATE,
+  EDIT_TYPE,
 } from "./types";
+export const editType = (value) => (dispatch) => {
+  try {
+    dispatch({
+      type: EDIT_TYPE,
+      payload: value,
+    });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: "ERROR",
+      payload: err,
+    });
+  }
+};
 
 export const editTemplate = (value) => (dispatch) => {
   try {

@@ -6,4 +6,5 @@ export const EDIT_URL = "EDIT_URL";
 export const EDIT_CLASS = "EDIT_CLASS";
 export const EDIT_DETAILS = "EDIT_DETAILS";
 export const EDIT_TEMPLATE = "EDIT_TEMPLATE";
+export const EDIT_TYPE = "EDIT TYPE";
 export const ERROR = "ERROR";
