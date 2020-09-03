@@ -1,6 +1,7 @@
 import React from "react";
 import { LandingButtons } from "../components/LandingButtons";
 export const Landing = () => {
+  console.log("knmn2000 says Hello");
   return (
     <div className="landing">
       <span className="landing-text">SONIC</span>
@@ -22,6 +23,14 @@ export const Landing = () => {
         <LandingButtons
           text="Sentry"
           link="https://sentry.radicali.io/radicali/sonic/"
+        />
+        <LandingButtons
+          text="Trello"
+          link="https://trello.com/b/cMK2ZEkR/radicali-sprint-board?menu=filter&filter=label:Sonic"
+        />
+        <LandingButtons
+          text="Gitlab"
+          link="https://gitlab.radicali.io/scraping/sonic"
         />
       </div>
     </div>
