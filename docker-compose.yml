@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  sonic-templater:
+    container_name: sonic-templater
+    restart: always
+    build: .
+    ports:
+      - "80:3000"
